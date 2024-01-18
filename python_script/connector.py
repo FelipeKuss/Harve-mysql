@@ -8,23 +8,32 @@ conn = mysql.connector.connect (
     port='3307'
 )
 
-CREATE TABLE meu.contagem_jogos (
-nome_player 		VARCHAR(20),
-jogada_player 		VARCHAR(10),
-jogada_computador 	VARCHAR(10),
-flag_vitoria		VARCHAR(1),
-data_registro		DATETIME DEFAULT CURRENT_TIMESTAMP()
+print("Este é um jogo de pedra, papel ou tesoura")
+print("Por favor insira seu nome:")
+nome_jogador = input()
 
-);
-
-
-INSERT INTO contagem_jogos (nome_player,jogada_player,jogada_computador,flag_vitoria)
-VALUES ('Jogador','Pedra','Pedra','E')
-;
-
-
+print("Insira a sua jogada (PEDRA,PAPEL,TESOURA):")
+jogador = input()
+computador = "Pedra"
+if jogador == computador:
+    resultado = 'Empate'
+elif jogador == 'PAPEL':
+    resultado = 'VITÓRIA'
+else:
+    resultado = 'Derrota'
+    
+print(resultado)
+    
 cursor = conn.cursor()
-cursor.execute("SELECT * FROM contagem_jogos")
-row = cursor.fetchall()
-print(row)
 
+query = f"""
+    INSERT INTO contagem_jogos
+        (nome_player,jogada_player,jogada_computador,resultado)
+    VALUES
+        ('{nome_jogador}','{jogador}','{computador}','{resultado[0]}')
+"""
+
+
+cursor.execute(query)
+conn.commit()
+cursor.close()
